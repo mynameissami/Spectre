@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>S.P.E.C.T.R.E. | Security Interception</title>
+    <style>
+      body {
+        background-color: #0a0a0f;
+        color: #e0e0e0;
+        font-family: "Courier New", Courier, monospace;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        text-align: center;
+      }
+      .container {
+        border: 2px solid #ff3333;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(255, 51, 51, 0.2);
+        max-width: 600px;
+      }
+      h1 {
+        color: #ff3333;
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        text-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+      }
+      h2 {
+        color: #00ff41;
+        font-size: 1.2em;
+        margin-bottom: 30px;
+      }
+      p {
+        font-size: 1.1em;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+      .highlight {
+        color: #00ff41;
+        font-weight: bold;
+      }
+      .footer {
+        margin-top: 40px;
+        font-size: 0.8em;
+        color: #666;
+        border-top: 1px solid #333;
+        padding-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>⚠️ DNS SPOOFING DETECTED ⚠️</h1>
+      <h2>You have been intercepted by S.P.E.C.T.R.E.</h2>
+
+      <p>Your DNS query was successfully intercepted and redirected.</p>
+      <p>
+        Instead of reaching the website you requested, your traffic was routed
+        to this demonstration server.
+      </p>
+
+      <p>
+        In a real-world scenario, an attacker could use this
+        <span class="highlight">Man-in-the-Middle (MITM)</span> position to:
+      </p>
+      <ul style="text-align: left; display: inline-block">
+        <li>Steal login credentials via fake login pages.</li>
+        <li>Inject malware into downloaded files.</li>
+        <li>Monitor all unencrypted (HTTP) web traffic.</li>
+      </ul>
+
+      <div class="footer">
+        S.P.E.C.T.R.E. Engine OS v1.0<br />
+        Signal Processing & Electronic Cyber Security Reconnaissance Engine<br />
+        <span style="color: #ff3333"
+          >This is a controlled security demonstration.</span
+        >
+      </div>
+    </div>
+  </body>
+</html>
