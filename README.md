@@ -8,7 +8,7 @@
 > [!WARNING]  
 > **LEGAL DISCLAIMER:** This project is a dual-use security tool provided exclusively for **educational purposes, academic research, and authorized network security auditing**. Intercepting network traffic, performing Denial-of-Service (DoS) attacks, or creating rogue access points on unauthorized networks is strictly illegal. The maintainers are **NOT** responsible for any misuse of this framework. Please read the full [DISCLAIMER.md](DISCLAIMER.md) before proceeding.
 
-**Signal Processing & Electronic Cyber Security Reconnaissance Engine**
+**Signal Processing & Electronic Cyber Security Threat Reconnaissance Engine**
 
 S.P.E.C.T.R.E. Engine OS is an advanced, real-time telemetry processing, spectrum visualization, and wireless diagnostics platform. It provides a comprehensive suite of defensive analytics, offensive operations, and man-in-the-middle (MITM) tools wrapped in a high-performance PySide6 graphical user interface.
 
