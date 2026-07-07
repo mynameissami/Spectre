@@ -3,7 +3,7 @@
 // See LICENSE file for full terms.
 
 /*
-S.P.E.C.T.R.E. Edge Sensor Firmware v7.0 (STABLE & OPTIMIZED)
+S.P.E.C.T.R.E. Edge Sensor Firmware
 */
 #include "WiFi.h"
 #include "soc/rtc_cntl_reg.h"
