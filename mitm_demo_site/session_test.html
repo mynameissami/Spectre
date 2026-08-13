@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Secure Dashboard - Session Test</title>
+    <style>
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #1a1a2e;
+        color: #e0e0e0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      .dashboard {
+        background: #16213e;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        width: 400px;
+        text-align: center;
+        border: 1px solid #0f3460;
+      }
+      h1 {
+        color: #00ff41;
+        margin-bottom: 10px;
+      }
+      p {
+        color: #a0a0a0;
+        font-size: 14px;
+      }
+      button {
+        background: #e94560;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        margin-top: 20px;
+      }
+      button:hover {
+        background: #ff2e63;
+      }
+      #output {
+        margin-top: 20px;
+        text-align: left;
+        background: #0f3460;
+        padding: 15px;
+        border-radius: 6px;
+        font-family: monospace;
+        font-size: 12px;
+        color: #00ff41;
+        word-break: break-all;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard">
+      <h1>🔒 Secure Dashboard</h1>
+      <p>Click below to simulate a login and generate session tokens.</p>
+      <button onclick="generateTokens()">Simulate Login</button>
+      <div id="output"></div>
+    </div>
+
+    <script>
+      function generateTokens() {
+        // 1. Set a Session Cookie (HttpOnly simulation)
+        document.cookie = "sessionid=SESS_8f7d9a2b1c3e4f5a; path=/";
+
+        // 2. Generate a fake JWT (JSON Web Token)
+        const fakeJWT =
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+        localStorage.setItem("jwt_token", fakeJWT);
+
+        // 3. Display the tokens on screen
+        const out = document.getElementById("output");
+        out.style.display = "block";
+        out.innerHTML = `<strong>✅ Session Cookie Set:</strong><br>sessionid=SESS_8f7d9a2b1c3e4f5a<br><br><strong>✅ JWT Generated:</strong><br>${fakeJWT}`;
+
+        // 4. Force the browser to send the cookie back to the server
+        fetch("/api/verify-session");
+      }
+    </script>
+  </body>
+</html>
