@@ -102,5 +102,15 @@
 <b>Exhibition Note:</b> S.P.E.C.T.R.E. demonstrates a complete understanding of the OSI model, from Layer 1 (RF/Serial) to Layer 7 (HTTP/JS Injection), combined with modern AI integration for automated network intelligence.
 </blockquote>
 
+<h2>8. Performance & Optimization Standards (Phase 2)</h2>
+<p>To support extended monitoring and aggressive packet loads without UI freezing or memory leaks, the architecture enforces strict optimization standards:</p>
+<ul>
+    <li><b>Memory Bounding:</b> All <code>QTextEdit</code> log panes (Event Log, MITM Logs) are strictly capped at 1000 blocks via <code>setMaximumBlockCount(1000)</code>. Abstract models actively remove stale rows to maintain a flat memory footprint over long sessions.</li>
+    <li><b>Graph Rendering Throttling:</b> Time-series graphs (like <code>TimeGraphWidget</code>) automatically cull inactive elements (e.g., stale BSSIDs) and dynamically limit plotted elements to the top 50 active signals to conserve main thread CPU cycles.</li>
+    <li><b>QThread Lifecycle Management:</b> Background threads (e.g., <code>WiFiScanner</code>, <code>TelemetryReceiver</code>) are meticulously managed during application shutdown. The <code>MainWindow.closeEvent</code> explicitly halts and joins all QThreads to prevent garbage-collection core dumps.</li>
+    <li><b>Decoupled Polling:</b> High-throughput data ingestion (serial polling, async scanning) runs entirely out-of-band. The UI selectively pulls and downsamples data via a unified 15-20Hz QTimer rendering pass.</li>
+    <li><b>Graphics Tuning:</b> PyQtGraph anti-aliasing is disabled by default for rolling time-domain charts to minimize CPU usage, configurable via the Settings panel.</li>
+</ul>
+
 </body>
 </html>
