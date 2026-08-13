@@ -35,6 +35,7 @@ class MITMLogPane(QWidget):
         top_log_layout.addWidget(log_hdr)
 
         self._log = QTextEdit()
+        self._log.document().setMaximumBlockCount(1000)
         self._log.setObjectName("event_log")
         self._log.setReadOnly(True)
         self._log.setLineWrapMode(QTextEdit.LineWrapMode.NoWrap)
@@ -53,6 +54,7 @@ class MITMLogPane(QWidget):
         bottom_log_layout.addWidget(passive_hdr)
 
         self._passive_log = QTextEdit()
+        self._passive_log.document().setMaximumBlockCount(1000)
         self._passive_log.setObjectName("event_log")
         self._passive_log.setReadOnly(True)
         self._passive_log.setLineWrapMode(QTextEdit.LineWrapMode.NoWrap)

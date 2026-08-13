@@ -42,9 +42,16 @@ class TimeGraphWidget(pg.PlotWidget):
         active_bssids = set(unique_aps.keys())
         
         # Age out old networks
-        for bssid in list(self._time_data.keys()):
+        stale_bssids = []
+        for bssid in self._time_data:
             if bssid not in active_bssids:
                 self._time_data[bssid].append((self._time_x, -100.0))
+                # Mark for deletion if it's been stale for too long
+                if all(d[1] == -100.0 for d in self._time_data[bssid][-10:]):
+                    stale_bssids.append(bssid)
+        
+        for bssid in stale_bssids:
+            del self._time_data[bssid]
         
         # Update with new data
         for bssid, ap in unique_aps.items():
@@ -52,14 +59,23 @@ class TimeGraphWidget(pg.PlotWidget):
                 self._time_data[bssid] = []
             self._time_data[bssid].append((self._time_x, ap['rssi']))
             
-        # Global truncate
+        # Global truncate to 60 elements per bssid
         for bssid in self._time_data:
             if len(self._time_data[bssid]) > 60:
                 self._time_data[bssid] = self._time_data[bssid][-60:]
 
+        # To avoid lag, we only plot the top 50 active BSSIDs by latest RSSI
+        # If there are more than 50, we pick the strongest 50
+        sorted_bssids = sorted(
+            self._time_data.keys(),
+            key=lambda b: self._time_data[b][-1][1],
+            reverse=True
+        )[:50]
+
         self.clear()
         
-        for bssid, data in self._time_data.items():
+        for bssid in sorted_bssids:
+            data = self._time_data[bssid]
             if not data or data[-1][1] == -100.0: 
                 continue
                 
