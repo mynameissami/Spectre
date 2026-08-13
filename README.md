@@ -169,7 +169,14 @@ GROQ_API_KEY="your_api_key_here"
 
 ## 💻 Usage
 
-### Linux
+### Demo Mode (No Hardware Required)
+If you do not have an ESP32 connected, you can run S.P.E.C.T.R.E. in software simulation mode:
+```bash
+python main.py --demo
+```
+This generates synthetic telemetry and fake AP targets, allowing you to explore the UI and features.
+
+### Linux (Full Hardware Mode)
 ```bash
 sudo ./.venv/bin/python main.py
 ```
