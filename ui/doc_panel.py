@@ -134,25 +134,25 @@ class DocPanel(QWidget):
         """Update inline styles when the theme changes."""
         self._nav_list.setStyleSheet(f"""
             QListWidget {{
-                background-color: {config.COLOR_BACKGROUND_DARK};
+                background-color: {config.COLOR_BG};
                 color: {config.COLOR_TEXT_PRIMARY};
                 border: 1px solid {config.COLOR_BORDER};
             }}
             QListWidget::item:selected {{
-                background-color: {config.COLOR_ACCENT_BLUE};
-                color: {config.COLOR_BACKGROUND_DARK};
+                background-color: {config.COLOR_ACCENT_CYAN};
+                color: {config.COLOR_BG};
             }}
         """)
         self._doc_viewer.setStyleSheet(f"""
             QTextBrowser {{
-                background-color: {config.COLOR_BACKGROUND_DARK};
+                background-color: {config.COLOR_BG};
                 color: {config.COLOR_TEXT_PRIMARY};
                 border: 1px solid {config.COLOR_BORDER};
             }}
         """)
         self._chat_history.setStyleSheet(f"""
             QTextEdit {{
-                background-color: {config.COLOR_BACKGROUND_DARK};
+                background-color: {config.COLOR_BG};
                 color: {config.COLOR_TEXT_PRIMARY};
                 border: 1px solid {config.COLOR_BORDER};
             }}
