@@ -46,7 +46,7 @@ DOCUMENTATION:
 """
 
             response = self.client.chat.completions.create(
-                model="qwen/qwen3.6-27b",
+                model="llama-3.3-70b-versatile",
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_question},
@@ -54,7 +54,6 @@ DOCUMENTATION:
                 temperature=0.4, # Lower temperature for more grounded responses
                 max_completion_tokens=2048,
                 top_p=0.95,
-                reasoning_effort="default",
             )
 
             raw_content = response.choices[0].message.content
