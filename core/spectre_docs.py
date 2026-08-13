@@ -5,23 +5,42 @@
 """
 core/spectre_docs.py — Documentation loader.
 
-The HTML content lives in assets/docs/spectre_docs.html.
-This module loads it at import time and provides the same
-SPECTRE_DOCUMENTATION constant for backward compatibility.
+Loads all offline Wiki markdown files from assets/docs/wiki/.
+Provides `get_wiki_pages()` for UI rendering and `get_full_documentation()`
+for the AI context.
 """
 
 from __future__ import annotations
-
+import os
 from pathlib import Path
 
-_DOCS_PATH = Path(__file__).parent.parent / "assets" / "docs" / "spectre_docs.html"
+WIKI_DIR = Path(__file__).parent.parent / "assets" / "docs" / "wiki"
 
-def load_docs() -> str:
-    """Load and return the full HTML documentation string."""
-    try:
-        return _DOCS_PATH.read_text(encoding="utf-8")
-    except OSError:
-        return "<html><body><p>Documentation file not found.</p></body></html>"
+def get_wiki_pages() -> dict[str, str]:
+    """Returns a dictionary mapping filename (without .md) to markdown content."""
+    pages = {}
+    if WIKI_DIR.exists():
+        # Sort files so they appear in a consistent order in the UI
+        for file in sorted(WIKI_DIR.glob("*.md")):
+            try:
+                pages[file.stem] = file.read_text(encoding="utf-8")
+            except OSError:
+                pass
+    return pages
 
-# Backward-compatible constant — loaded once at import time
-SPECTRE_DOCUMENTATION: str = load_docs()
+def get_full_documentation() -> str:
+    """Concatenates all wiki pages for the AI RAG context."""
+    pages = get_wiki_pages()
+    if not pages:
+        return "No offline documentation found."
+        
+    content = []
+    for title, text in pages.items():
+        content.append(f"--- [WIKI PAGE: {title}] ---")
+        content.append(text)
+        content.append("\n")
+        
+    return "\n".join(content)
+
+# Backward-compatible constant for direct import if needed
+SPECTRE_DOCUMENTATION: str = get_full_documentation()

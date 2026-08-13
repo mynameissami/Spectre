@@ -42,9 +42,15 @@ class TimeGraphWidget(pg.PlotWidget):
         active_bssids = set(unique_aps.keys())
         
         # Age out old networks
+        stale_bssids = []
         for bssid in list(self._time_data.keys()):
             if bssid not in active_bssids:
                 self._time_data[bssid].append((self._time_x, -100.0))
+                if len(self._time_data[bssid]) >= 10 and all(d[1] == -100.0 for d in self._time_data[bssid][-10:]):
+                    stale_bssids.append(bssid)
+        
+        for bssid in stale_bssids:
+            del self._time_data[bssid]
         
         # Update with new data
         for bssid, ap in unique_aps.items():

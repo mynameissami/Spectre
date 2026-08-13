@@ -45,21 +45,24 @@ class ChannelRatingWidget(QWidget):
         # Clear layout
         while self._scroll_layout.count():
             item = self._scroll_layout.takeAt(0)
-            if item.widget(): item.widget().deleteLater()
+            if item is not None:
+                w = item.widget()
+                if w is not None:
+                    w.deleteLater()
             
         title_text = "5 GHz Channel Ratings" if is_5ghz else "2.4 GHz Channel Ratings"
         title = QLabel(title_text)
         title.setStyleSheet(f"color: {config.COLOR_ACCENT_CYAN}; font-weight: bold; font-size: 16px;")
         self._scroll_layout.addWidget(title)
         
-        best_ch = max(channel_scores, key=channel_scores.get)
+        best_ch = max(channel_scores, key=lambda k: channel_scores[k])
         
         # For 5GHz, limit to common non-DFS channels to avoid excessive scrolling
         display_channels = [36, 40, 44, 48, 149, 153, 157, 161, 165] if is_5ghz else range(1, 14)
         
         for ch in display_channels:
             score = channel_scores[ch]
-            stars = int(round((score / 10.0) * 10))
+            stars = round((score / 10.0) * 10)
             star_str = "★" * stars + "☆" * (10 - stars)
             
             color = config.COLOR_ACCENT_GREEN if stars >= 7 else (config.COLOR_ACCENT_ORANGE if stars >= 4 else config.COLOR_ACCENT_RED)

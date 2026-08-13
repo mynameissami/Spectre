@@ -144,7 +144,7 @@ class ReconPanel(QWidget):
 
     def _on_selection_changed(self):
         selected = self._tree.selectedItems()
-        self._port_scan_btn.setEnabled(selected and selected[0].parent() is None)
+        self._port_scan_btn.setEnabled(bool(selected and selected[0].parent() is None))
 
     def _on_port_scan_clicked(self):
         selected = self._tree.selectedItems()
@@ -155,7 +155,7 @@ class ReconPanel(QWidget):
         # Check if IP already exists
         for i in range(self._tree.topLevelItemCount()):
             item = self._tree.topLevelItem(i)
-            if item.text(0) == ip:
+            if item is not None and item.text(0) == ip:
                 item.setText(1, mac)
                 item.setText(2, vendor)
                 item.setText(3, os_name)
@@ -178,7 +178,7 @@ class ReconPanel(QWidget):
     def add_open_port(self, ip: str, port: int, service: str):
         for i in range(self._tree.topLevelItemCount()):
             item = self._tree.topLevelItem(i)
-            if item.text(0) == ip:
+            if item is not None and item.text(0) == ip:
                 child = QTreeWidgetItem(item)
                 child.setText(2, f"Port {port}")
                 child.setText(3, service)

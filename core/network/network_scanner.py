@@ -13,7 +13,7 @@ import re
 from PySide6.QtCore import QThread, Signal
 
 try:
-    from scapy.all import ARP, Ether, srp, IP, ICMP, sr1, conf
+    from scapy.all import ARP, Ether, srp, IP, ICMP, sr1, conf  # type: ignore[import-not-found, import-untyped]
 
     conf.verb = 0
     SCAPY_AVAILABLE = True

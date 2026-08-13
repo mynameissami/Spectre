@@ -11,22 +11,7 @@ from __future__ import annotations
 import logging
 
 try:
-    from scapy.all import (  # type: ignore[import-untyped]
-        ARP,
-        Ether,
-        IP,
-        UDP,
-        TCP,
-        DNS,
-        DNSQR,
-        DNSRR,
-        Raw,
-        send,
-        sendp,
-        sniff,
-        conf,
-        get_if_hwaddr,
-    )
+    from scapy.all import ARP, Ether, IP, UDP, TCP, DNS, DNSQR, DNSRR, Raw, send, sendp, sniff, conf, get_if_hwaddr  # type: ignore[import-not-found, import-untyped]
     import logging as _logging
     _logging.getLogger("scapy").setLevel(logging.ERROR)
     conf.verb = 0

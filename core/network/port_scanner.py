@@ -74,7 +74,7 @@ class PortScanner(QThread):
     scan_finished = Signal()
     log_signal = Signal(str, str)
 
-    def __init__(self, target_ip: str, ports: list = None, parent=None):
+    def __init__(self, target_ip: str, ports: list[int] | None = None, parent=None):
         super().__init__(parent)
         self.target_ip = target_ip
         self.ports = ports or COMMON_PORTS

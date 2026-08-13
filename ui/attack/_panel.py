@@ -85,7 +85,9 @@ class AttackPanel(QWidget):
 
         self._target_combo = ComboBox()
         self._target_combo.setEditable(True)
-        self._target_combo.lineEdit().setPlaceholderText("Enter MAC (e.g., 00:11:22...)")
+        le = self._target_combo.lineEdit()
+        if le is not None:
+            le.setPlaceholderText("Enter MAC (e.g., 00:11:22...)")
         self._target_combo.addItems(["BROADCAST (FF:FF:FF:FF:FF:FF)", "Custom Target..."])
         form.addRow("TARGET BSSID / MAC:", self._target_combo)
 

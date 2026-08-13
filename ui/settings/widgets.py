@@ -42,11 +42,11 @@ class ComboBox(QComboBox):
         # (which cause the white strips). We make the line edit read-only to preserve
         # standard dropdown behavior.
         self.setEditable(True)
-        self.lineEdit().setReadOnly(True)
-        
-        # Hide the text cursor and selection so it doesn't look like a text box
-        self.lineEdit().setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        self.lineEdit().setCursor(Qt.CursorShape.ArrowCursor)
+        le = self.lineEdit()
+        if le is not None:
+            le.setReadOnly(True)
+            le.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+            le.setCursor(Qt.CursorShape.ArrowCursor)
 
 
 class LabelledSlider(QWidget):

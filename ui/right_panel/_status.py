@@ -66,5 +66,5 @@ class StatusPanel(QWidget):
     def set_packet_stats(self, total: int, recent: int) -> None:
         self.set("pps", f"{recent} PPS | Total: {total}")
 
-    def set_recon_stats(self, devices: int, new_devices: int) -> None:
-        self.set("recon", f"{devices} nodes (+{new_devices})")
+    def set_recon_stats(self, aps: int, rogues: int, hidden: int) -> None:
+        self.set("recon", f"{aps} APs | {rogues} Rogues | {hidden} Hidden")

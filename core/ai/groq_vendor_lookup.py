@@ -60,6 +60,9 @@ If you cannot identify it, respond with "Unknown Device"."""
 
             raw_content = response.choices[0].message.content
 
+            if raw_content is None:
+                return "Unknown"
+
             # FIX 2: Robust string splitting instead of regex
             if "</think>" in raw_content:
                 # Model finished thinking properly. Take everything after the closing tag.

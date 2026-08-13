@@ -15,6 +15,10 @@ theme switching without restarting the application.
 """
 
 from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from core.settings_manager import FontSettings
 
 import pyqtgraph as pg
 import config

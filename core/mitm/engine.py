@@ -47,9 +47,12 @@ class MITMEngine(QThread):
         self._running_flag: list[bool] = [False]
 
         self.attacker_ip = self._get_local_ip()
-        self.attacker_mac = (
-            get_if_hwaddr(conf.iface) if SCAPY_AVAILABLE else "00:00:00:00:00:00"
-        )
+        self.attacker_mac = "00:00:00:00:00:00"
+        if SCAPY_AVAILABLE and get_if_hwaddr is not None and conf is not None:
+            try:
+                self.attacker_mac = get_if_hwaddr(conf.iface)
+            except Exception:
+                pass
 
     def _get_local_ip(self) -> str:
         try:

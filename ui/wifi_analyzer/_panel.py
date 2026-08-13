@@ -74,7 +74,9 @@ class WifiAnalyzerPanel(QWidget):
         
         self._mesh_ssid_combo = ComboBox()
         self._mesh_ssid_combo.setEditable(True)
-        self._mesh_ssid_combo.lineEdit().setPlaceholderText("Target SSID...")
+        mesh_le = self._mesh_ssid_combo.lineEdit()
+        if mesh_le is not None:
+            mesh_le.setPlaceholderText("Target SSID...")
         self._mesh_ssid_combo.hide()
         self._mesh_ssid_combo.currentTextChanged.connect(self._on_mesh_ssid_changed)
         ctrl_bar.addWidget(self._mesh_ssid_combo)
@@ -83,7 +85,9 @@ class WifiAnalyzerPanel(QWidget):
         
         self._sonar_combo = ComboBox()
         self._sonar_combo.setEditable(True)
-        self._sonar_combo.lineEdit().setPlaceholderText("Target BSSID...")
+        sonar_le = self._sonar_combo.lineEdit()
+        if sonar_le is not None:
+            sonar_le.setPlaceholderText("Target BSSID...")
         ctrl_bar.addWidget(self._sonar_combo)
         
         self._sonar_btn = QPushButton("SONAR")

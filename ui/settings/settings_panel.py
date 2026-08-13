@@ -349,6 +349,8 @@ class SettingsPanel(QWidget):
     def _apply_settings(self, s: AppSettings) -> None:
         """Push settings into SettingsManager, rebuild QSS, notify observers."""
         app = QApplication.instance()
+        if not isinstance(app, QApplication):
+            return
         ThemeManager.instance().apply(s.theme, app)
 
         mgr_s = self._mgr.settings
@@ -370,24 +372,19 @@ class SettingsPanel(QWidget):
     def _on_preview_theme(self, theme_name: str) -> None:
         """Live-preview without persisting."""
         app = QApplication.instance()
+        if not isinstance(app, QApplication):
+            return
         ThemeManager.instance().apply(theme_name, app)
         app.setStyleSheet(build_qss())
         self._unsaved_lbl.setText("Unsaved changes — click Apply to save.")
 
     def _on_preview_font(self, font: FontSettings) -> None:
         """Live-preview fonts without persisting."""
-        import config
-        config.FONT_GLOBAL_UI = font.global_ui
-        config.FONT_MENU_BAR = font.menu_bar
-        config.FONT_LABELS = font.labels
-        config.FONT_BUTTONS = font.buttons
-        config.FONT_EVENT_LOG = font.event_log
-        config.FONT_TABLES = font.tables
-        config.FONT_PLOTS = font.plots
-
         app = QApplication.instance()
+        if not isinstance(app, QApplication):
+            return
         from styles import build_qss
-        app.setStyleSheet(build_qss())
+        app.setStyleSheet(build_qss(font=font))
         ThemeManager.instance().theme_changed.emit()
         self._unsaved_lbl.setText("Unsaved changes — click Apply to save.")
 

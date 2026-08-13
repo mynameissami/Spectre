@@ -47,26 +47,26 @@ DEAUTH_WINDOW_SEC = 1.0  # sliding window duration
 EVENT_LOG_MAX_LINES = 500  # hard cap on log lines in QTextEdit
 
 # ─── Colour Palette ──────────────────────────────────────────────────────────
-COLOR_BG = "#0A0A0A"
-COLOR_PANEL_BG = "#0F0F0F"
-COLOR_BG_PANEL = COLOR_PANEL_BG  # backward-compatible alias
-COLOR_BORDER = "#1A1A2E"
-COLOR_ACCENT_GREEN = "#00FF41"  # cyber matrix green
-COLOR_ACCENT_RED = "#FF3333"  # critical red
-COLOR_ACCENT_ORANGE = "#FFA500"  # warning orange
-COLOR_ACCENT_CYAN = "#00D4FF"  # info cyan
-COLOR_TEXT_PRIMARY = "#E0E0E0"
-COLOR_TEXT_DIM = "#5A5A6A"
-COLOR_PLOT_BG = "#050508"
-COLOR_PLOT_GRID = "#1A1A2E"
+COLOR_BG: str = "#0A0A0A"
+COLOR_PANEL_BG: str = "#0F0F0F"
+COLOR_BG_PANEL: str = COLOR_PANEL_BG  # backward-compatible alias
+COLOR_BORDER: str = "#1A1A2E"
+COLOR_ACCENT_GREEN: str = "#00FF41"  # cyber matrix green
+COLOR_ACCENT_RED: str = "#FF3333"  # critical red
+COLOR_ACCENT_ORANGE: str = "#FFA500"  # warning orange
+COLOR_ACCENT_CYAN: str = "#00D4FF"  # info cyan
+COLOR_TEXT_PRIMARY: str = "#E0E0E0"
+COLOR_TEXT_DIM: str = "#5A5A6A"
+COLOR_PLOT_BG: str = "#050508"
+COLOR_PLOT_GRID: str = "#1A1A2E"
 
 # Plot Traces
-COLOR_RAW_RSSI = "#FF3333"  # red dotted
-COLOR_SMOOTH_RSSI = "#00FF41"  # green solid
+COLOR_RAW_RSSI: str = "#FF3333"  # red dotted
+COLOR_SMOOTH_RSSI: str = "#00FF41"  # green solid
 
 # Channel Spectrum
-COLOR_SPECTRUM_BASE = "#00D4FF"
-COLOR_SPECTRUM_HOT = "#FFA500"
+COLOR_SPECTRUM_BASE: str = "#00D4FF"
+COLOR_SPECTRUM_HOT: str = "#FFA500"
 
 # ─── Layout Ratios ────────────────────────────────────────────────────────────
 LEFT_PANEL_RATIO = 7  # 70%

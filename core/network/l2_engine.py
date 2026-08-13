@@ -13,7 +13,7 @@ import random
 from PySide6.QtCore import QThread, Signal
 
 try:
-    from scapy.all import ARP, DHCP, Ether, IP, UDP, ICMP, send, sendp, conf
+    from scapy.all import ARP, DHCP, Ether, IP, UDP, ICMP, send, sendp, conf  # type: ignore[import-not-found, import-untyped]
 
     # Disable Scapy's verbose output globally to prevent terminal spam
     conf.verb = 0
@@ -48,7 +48,7 @@ class L2Engine(QThread):
 
         # Map intensity (1-100) to packets per second (10 PPS to 1000 PPS)
         # This non-linear scale provides better control at low intensities
-        pps = max(10, int(self.intensity * 10))
+        pps = max(10, self.intensity * 10)
         interval = 1.0 / pps
 
         try:

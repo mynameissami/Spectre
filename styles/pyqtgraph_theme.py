@@ -33,10 +33,13 @@ def make_plot_widget(title: str = "", y_label: str = "", x_label: str = "") -> p
     pw = pg.PlotWidget()
     pw.setBackground(config.COLOR_PLOT_BG)
     pw.showGrid(x=True, y=True, alpha=0.18)
-    pw.getPlotItem().getAxis("bottom").setPen(pg.mkPen(config.COLOR_PLOT_GRID))
-    pw.getPlotItem().getAxis("left").setPen(pg.mkPen(config.COLOR_PLOT_GRID))
-    pw.getPlotItem().getAxis("bottom").setTextPen(pg.mkPen(config.COLOR_TEXT_DIM))
-    pw.getPlotItem().getAxis("left").setTextPen(pg.mkPen(config.COLOR_TEXT_DIM))
+    
+    plot_item = pw.getPlotItem()
+    if plot_item is not None:
+        plot_item.getAxis("bottom").setPen(pg.mkPen(config.COLOR_PLOT_GRID))  # type: ignore[attr-defined]
+        plot_item.getAxis("left").setPen(pg.mkPen(config.COLOR_PLOT_GRID))    # type: ignore[attr-defined]
+        plot_item.getAxis("bottom").setTextPen(pg.mkPen(config.COLOR_TEXT_DIM)) # type: ignore[attr-defined]
+        plot_item.getAxis("left").setTextPen(pg.mkPen(config.COLOR_TEXT_DIM))   # type: ignore[attr-defined]
 
     if title:
         pw.setTitle(title, color=config.COLOR_ACCENT_CYAN, size=font_size)
