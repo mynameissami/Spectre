@@ -130,6 +130,12 @@ class DocPanel(QWidget):
 
         self.refresh_theme()
 
+        # Welcome message
+        self._append_to_chat(
+            "AI",
+            "Hello! I am the S.P.E.C.T.R.E. AI Assistant. Ask me anything about the system architecture, MITM attacks, or network reconnaissance features.",
+        )
+
     def refresh_theme(self):
         """Update inline styles when the theme changes."""
         self._nav_list.setStyleSheet(f"""
@@ -161,12 +167,6 @@ class DocPanel(QWidget):
     def _on_page_selected(self, title: str):
         if title in self._wiki_pages:
             self._doc_viewer.setMarkdown(self._wiki_pages[title])
-
-        # Welcome message
-        self._append_to_chat(
-            "AI",
-            "Hello! I am the S.P.E.C.T.R.E. AI Assistant. Ask me anything about the system architecture, MITM attacks, or network reconnaissance features.",
-        )
 
     @staticmethod
     def _md_to_html(text: str) -> str:
