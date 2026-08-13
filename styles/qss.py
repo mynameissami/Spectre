@@ -271,22 +271,6 @@ QComboBox:hover, QComboBox:focus {{
     border: 1px solid {config.COLOR_ACCENT_CYAN};
 }}
 
-QComboBox::drop-down {{
-    subcontrol-origin: padding;
-    subcontrol-position: top right;
-    width: 24px;
-    border-left: 1px solid {config.COLOR_BORDER};
-    background-color: {config.COLOR_PANEL_BG};
-}}
-
-QComboBox::drop-down:hover {{
-    background-color: {rgba(config.COLOR_ACCENT_CYAN, 0.1)};
-}}
-
-QComboBox::down-arrow {{
-    width: 14px;
-    height: 14px;
-}}
 
 QComboBox QAbstractItemView {{
     background-color: {config.COLOR_PANEL_BG};
@@ -323,14 +307,7 @@ QSpinBox:hover {{
     border-bottom-color: {config.COLOR_ACCENT_CYAN};
 }}
 
-QSpinBox::up-button, QSpinBox::down-button {{
-    width: 16px;
-    border: none;
-    background-color: transparent;
-}}
-QSpinBox::up-button:hover, QSpinBox::down-button:hover {{
-    background-color: {config.COLOR_BORDER};
-}}
+
 
 
 /* ── Event Log & Chat ───────────────────────────────────────────────────────── */
