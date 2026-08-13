@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/main.png" alt="SPECTRE" width="500"/>
+  <img src="assets/main.png?v=2" alt="SPECTRE" width="500"/>
 </p>
 
 # S.P.E.C.T.R.E. Engine OS
@@ -23,11 +23,11 @@ S.P.E.C.T.R.E. Engine OS is an advanced, real-time telemetry processing, spectru
 
 | Dashboard & Telemetry | Network Reconnaissance |
 |:---:|:---:|
-| ![Main Dashboard](assets/main.png) | ![Network Scanner](assets/network.png) |
+| ![Main Dashboard](assets/main.png?v=2) | ![Network Scanner](assets/network.png?v=2) |
 | **MITM & Harvester** | **Offensive Operations** |
-| ![Man-In-The-Middle](assets/mitm.png) | ![Attack Vectors](assets/attack.png) |
+| ![Man-In-The-Middle](assets/mitm.png?v=2) | ![Attack Vectors](assets/attack.png?v=2) |
 
-*(L1/L2 details also available: [L2/L1 Overview](assets/l2l1.png))*
+*(L1/L2 details also available: [L2/L1 Overview](assets/l2l1.png?v=2))*
 
 ---
 
