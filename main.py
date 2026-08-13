@@ -66,6 +66,9 @@ def main() -> int:
     app.setStyleSheet(build_qss())
     apply_pyqtgraph_theme()
 
+    # Disable auto-quit to prevent crash during splash transition
+    app.setQuitOnLastWindowClosed(False)
+
     # ── 1. SHOW SPLASH SCREEN FIRST ──────────────────────────────────────────
     splash = SplashScreen(duration_ms=21000, video_path="assets/intro.mp4")
     splash.show()
@@ -76,14 +79,13 @@ def main() -> int:
 
     # ─ 3. SEQUENCE: Switch to Main Window after 20 seconds ──────────────────
     def transition_to_main():
-        # Show main window FIRST to keep the app alive
         window.show()
         window.raise_()
         window.activateWindow()
-
+        
         # Then close splash
         splash.close()
-
+        
         # Re-enable normal quit behavior
         app.setQuitOnLastWindowClosed(True)
 

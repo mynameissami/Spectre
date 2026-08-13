@@ -129,7 +129,43 @@ class TelemetryReceiver(QThread):
     # ─── Thread Body ──────────────────────────────────────────────────────────
 
     def run(self) -> None:
-        self._run_serial()
+        if self.port == "DEMO":
+            self._run_demo()
+        else:
+            self._run_serial()
+
+    # ─── Demo Mode ────────────────────────────────────────────────────────────
+
+    def _run_demo(self) -> None:
+        self.status_changed.emit("Connected to DEMO Simulator")
+        self.connected.emit()
+
+        import random
+        import time
+
+        # Emit some initial fake scan results
+        time.sleep(1)
+        self._dispatch_line("SCAN:Guest Network,AA:BB:CC:DD:EE:01,1,-50")
+        self._dispatch_line("SCAN:Corporate WiFi,AA:BB:CC:DD:EE:02,6,-60")
+        self._dispatch_line("SCAN:IoT Device,AA:BB:CC:DD:EE:03,11,-70")
+        self._dispatch_line("SCAN_DONE:3")
+        time.sleep(1)
+        self._dispatch_line("TARGET:Corporate WiFi,AA:BB:CC:DD:EE:02,6")
+
+        while not self._stop_event.is_set():
+            time.sleep(0.05)  # 20 FPS telemetry
+
+            # Random telemetry frame
+            rssi = random.randint(-85, -30)
+            size = random.randint(40, 1500)
+            prefix = random.choice(["MGMT:", "DAT:"])
+            subtype = random.choice(["4", "8", "12", "0"])
+            # Sometimes attach BSSID
+            bssid = ",AA:BB:CC:DD:EE:02,6" if random.random() > 0.5 else ""
+            self._dispatch_line(f"{prefix}{rssi},{size},{subtype}{bssid}")
+
+        self.status_changed.emit("Disconnected")
+        self.disconnected.emit()
 
     # ─── Serial Mode ──────────────────────────────────────────────────────────
 

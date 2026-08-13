@@ -413,4 +413,8 @@ class MainWindow(QMainWindow, MenuBuilderMixin, PacketHandlerMixin, ConnectionHa
             engine.stop()
         for engine in list(self._passive_engines.values()):
             engine.stop()
+        
+        from PySide6.QtWidgets import QApplication
+        QApplication.quit()
+        
         super().closeEvent(event)

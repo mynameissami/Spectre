@@ -166,9 +166,8 @@ class PacketHandlerMixin:
             recent_pkts = sum(1 for t in self._pkt_timestamps if t > cutoff)
             self._status.set_packet_stats(self._dsp.total_packets, recent_pkts)
             self._status.set_recon_stats(
-                self._recon.known_ap_count,
+                self._recon.known_ap_count + self._recon.hidden_net_count,
                 self._recon.rogue_ap_count,
-                self._recon.hidden_net_count,
             )
     
             ap_count = self._recon.known_ap_count
