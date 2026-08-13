@@ -223,7 +223,6 @@ class AttackPanel(QWidget):
         log_pane.addWidget(log_hdr)
 
         self._log = QTextEdit()
-        self._log.document().setMaximumBlockCount(1000)
         self._log.setObjectName("event_log")
         self._log.setReadOnly(True)
         self._log.setLineWrapMode(QTextEdit.LineWrapMode.NoWrap)

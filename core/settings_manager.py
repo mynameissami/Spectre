@@ -42,7 +42,7 @@ class AppSettings:
     theme: str = "dark_hacker"
     font: FontSettings = field(default_factory=FontSettings)
     plot_fps: int = 60
-    antialiasing: bool = False
+    antialiasing: bool = True
     use_opengl: bool = False
 
 

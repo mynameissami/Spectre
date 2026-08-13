@@ -413,6 +413,15 @@ class MainWindow(QMainWindow, MenuBuilderMixin, PacketHandlerMixin, ConnectionHa
             engine.stop()
         for engine in list(self._passive_engines.values()):
             engine.stop()
+            
+        if hasattr(self, '_wifi_panel'):
+            self._wifi_panel.stop()
+            
+        if hasattr(self, '_scanner_thread') and self._scanner_thread:
+            self._scanner_thread.stop()
+            
+        if hasattr(self, '_port_scanner_thread') and self._port_scanner_thread:
+            self._port_scanner_thread.stop()
         
         from PySide6.QtWidgets import QApplication
         QApplication.quit()

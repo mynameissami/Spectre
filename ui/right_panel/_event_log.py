@@ -34,14 +34,6 @@ class LogModel(QAbstractListModel):
         return None
 
     def add_log(self, timestamp: str, level: str, message: str):
-        MAX_LOGS = 1000
-        
-        # If we're at the limit, remove the oldest item first
-        if len(self.logs) >= MAX_LOGS:
-            self.beginRemoveRows(QModelIndex(), 0, 0)
-            self.logs.pop(0)
-            self.endRemoveRows()
-            
         self.beginInsertRows(QModelIndex(), len(self.logs), len(self.logs))
         self.logs.append((timestamp, level, message))
         self.endInsertRows()

@@ -39,6 +39,12 @@ class WifiAnalyzerPanel(QWidget):
         self._scanner.scan_results_ready.connect(self._on_scan_results)
         self._scanner.start()
 
+    def stop(self) -> None:
+        if hasattr(self, '_scanner') and self._scanner:
+            self._scanner.stop()
+        if hasattr(self, '_sonar') and self._sonar:
+            self._sonar.stop()
+
     def _build_ui(self) -> None:
         layout = QVBoxLayout(self)
         layout.setContentsMargins(16, 16, 16, 16)
