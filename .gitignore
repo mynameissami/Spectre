@@ -1,7 +1,23 @@
+# ─── Environment & Secrets ────────────────────────────────────────────────────
 .env
+.spectre_settings.json
+
+# ─── Python ───────────────────────────────────────────────────────────────────
 .venv/
 __pycache__/
 *.pyc
+*.pyo
+
+# ─── IDE & Editor ─────────────────────────────────────────────────────────────
 .DS_Store
-.spectre_settings.json
+*.bak
+pyrightconfig.json
+.vscode/
+.idea/
+
+# ─── AI Agent Skills (not part of the project) ───────────────────────────────
+.agents/
+skills-lock.json
+
+# ─── Scripts (local-only) ────────────────────────────────────────────────────
 setup_demo.sh
